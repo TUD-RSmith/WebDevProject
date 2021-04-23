@@ -1,5 +1,7 @@
-<?php require_once('../templates/header2.php'); ?>
+<?php require_once('../templates/header2.php');
 
+// Sample form For Login
+?>
 <body>
 <div class="container">
     <form action="" method="post" name="Login_Form" class="form-signin">
@@ -19,20 +21,24 @@
 <?php
         require "config.php";
         require "common.php";
-        
-        escape($myusername = $_POST['username']);
-        escape($mypassword = $_POST['password']);
 
-
+        // Try Connection
         try {
             $pdo = new PDO("mysql:host=$host", $username, $password, $options);
             echo 'DB connected';
+            // Assign username and Password on Submit.
+            if(isset($_POST["Submit"])) {
+                escape($myusername = $_POST['username']);
+                escape($mypassword = $_POST['password']);
+            }
         } catch
         (PDOException $e) {
             throw new PDOException($e->getMessage(), (int)$e->getCode());
         }
 
-        $stmt = $pdo->query("SELECT username FROM databasetest.login WHERE username = '$myusername' and password = '$mypassword'");
+
+        // PDO MYSql Statement
+        $stmt = $pdo->query("SELECT username FROM databasetest.login WHERE username = '$myusername' and username is not NULL");
         while ($row = $stmt->fetch()) {
 
             if ($row > 0) {
